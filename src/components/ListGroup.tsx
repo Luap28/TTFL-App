@@ -40,29 +40,8 @@ function ListGroup() {
     "Minnesota Timberwolves",
   ];
 
-  let teamsResponse;
-
   const handleClick = () => {
-    const data = null;
-
-    const xhr = new XMLHttpRequest();
-    xhr.withCredentials = false;
-
-    xhr.addEventListener("readystatechange", function () {
-      if (this.readyState === this.DONE) {
-        let teamsResponse = JSON.parse(xhr.response);
-        console.log(teamsResponse);
-      }
-    });
-
-    xhr.open("GET", "https://api-nba-v1.p.rapidapi.com/teams");
-    xhr.setRequestHeader(
-      "x-rapidapi-key",
-      "b6d5cd0b13msh507ad1ae09a10e1p175aabjsne78bd1c239ff"
-    );
-    xhr.setRequestHeader("x-rapidapi-host", "api-nba-v1.p.rapidapi.com");
-
-    xhr.send(data);
+    getEastTeams();
   };
 
   return (
@@ -108,6 +87,44 @@ function ListGroup() {
       </ul>
     </>
   );
+}
+
+function getEastTeams() {
+  const data = null;
+
+  const xhr = new XMLHttpRequest();
+  xhr.withCredentials = false;
+
+  xhr.addEventListener("readystatechange", function () {
+    if (this.readyState === this.DONE) {
+      let teamsResponse = JSON.parse(xhr.response);
+      let eastFranchises2 = [];
+
+      console.log(teamsResponse);
+      let eastfranchiseNumber = 0;
+      for (let i = 0; eastfranchiseNumber < 15; i++) {
+        if (
+          teamsResponse.response[i].leagues.standard.conference === "East" &&
+          teamsResponse.response[i].allStar == false
+        ) {
+          console.log(teamsResponse.response[i].name);
+          eastFranchises2.push(teamsResponse.response[i].name);
+          eastfranchiseNumber++;
+        }
+      }
+      console.log(eastFranchises2);
+      return eastFranchises2;
+    }
+  });
+
+  xhr.open("GET", "https://api-nba-v1.p.rapidapi.com/teams");
+  xhr.setRequestHeader(
+    "x-rapidapi-key",
+    "b6d5cd0b13msh507ad1ae09a10e1p175aabjsne78bd1c239ff"
+  );
+  xhr.setRequestHeader("x-rapidapi-host", "api-nba-v1.p.rapidapi.com");
+
+  xhr.send(data);
 }
 
 export default ListGroup;
